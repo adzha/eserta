@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form id="frm-example" method="post" enctype='multipart/form-data'>
+  {% csrf_token %}
+  <legend>Hantar jemputan : {{ aktiviti.tajuk }}</legend>
+  {{ form|crispy }}
+  <hr>
+  <p class="text-center">
+    <button type="submit" id="submit1" class="btn btn-primary">Submit</button>
+    <a href="{% url 'aktiviti_detail' aktiviti.pk %}" class="btn btn-primary" >Cancel</a>
+  </p>   
+</form>
+{% endblock %}

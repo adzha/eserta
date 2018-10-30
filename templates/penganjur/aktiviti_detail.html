@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="page-header">
+    <legend>Maklumat Aktiviti</legend>
+  </div>
+
+  <div class="shadow">
+            	<table class="table">
+                	<thead>
+                    	<tr>
+                        	<th style="width: 250px;">#</th>
+                            <th>Deskripsi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	<tr>
+                        	<td>Tarikh / Masa mula</td>
+                            <td>{{ aktiviti.mula|date:'j-n-Y g:i A' }}</td>
+                        </tr>
+                        <tr>
+                        	<td>Tarikh / Masa tamat</td>
+                            <td>{{ aktiviti.akhir|date:'j-n-Y g:i A' }}</td>
+                        </tr>
+                        <tr>
+                        	<td>Tajuk</td>
+                            <td>{{ aktiviti.tajuk }}</td>
+                        </tr>
+                        <tr>
+                        	<td>Tempat</td>
+                            <td>{{ aktiviti.tempat }}</td>
+                        </tr>
+                        <tr>
+                        	<td>Penceramah</td>
+                            <td>{{ aktiviti.penceramah }}</td>
+                        </tr>
+                        <tr>
+                        	<td>Penganjur</td>
+                            <td>{{ aktiviti.penganjur }}</td>
+                        </tr>
+                        <tr>
+                        	<td>Had Peserta</td>
+                            <td>{{ aktiviti.hadpeserta }}</td>
+                        </tr>
+                        <tr>
+                        	<td>Status</td>
+                            <td>{{ aktiviti.status }}</td>
+                        </tr>
+                        <tr>
+                        	<td>Tarikh dibuka</td>
+                            <td>{{ aktiviti.buka }}</td>
+                        </tr>
+                         <tr>
+                        	<td>Tarikh ditutup</td>
+                            <td>{{ aktiviti.tutup }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+<p class="text-center">
+  <a href="{% url 'aktiviti_edit' aktiviti.pk %}" class="btn btn-primary" >Kemaskini</a>
+  <a href="{% url 'aktiviti_remove' aktiviti.pk %}" class="btn btn-primary" >Hapus</a>
+  <a href="{% url 'aktiviti_home' %}" class="btn btn-primary" >Senarai Aktiviti</a>
+  <a href="{% url 'aktiviti_jemput' aktiviti.pk %}" class="btn btn-primary" >Emel Jemputan</a>
+</p>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="page-header">
+      <!-- <h1>Hapus Maklumat Aktiviti</h1> -->
+      <legend>Hapus Maklumat Aktiviti</legend>
+    </div>
+
+    <div>
+      <form method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% if aktiviti %}
+          <p>Adakah anda pasti untuk menghapuskan aktiviti : {{ aktiviti.tajuk }} ?</p>
+          <p>Amaran ! Rekod aktiviti ini akan dihapuskan dan tidak boleh dikembalikan semula.</p>
+          <br>
+          <button type="submit" name="submit_yes" value="Yes" class="btn btn-primary">Yes</button>
+        {% else %}
+          <p>Maaf! Tiada maklumat berkenaan maklumat aktiviti ini. Berkemungkinan aktiviti ini telah dihapuskan atau belum dicipta lagi</p>
+          <br>
+        {% endif %}
+          <a href="{% url 'aktiviti_home' %}" class="btn btn-primary">No</a>
+      </form>
+    </div>
+
+{% endblock %}

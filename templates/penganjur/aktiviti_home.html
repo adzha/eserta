@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block content %}
+  <legend>Senarai Aktiviti Terkini</legend>
+  <div class="table-responsive">
+  <table id="example" class="stripe">
+  <!-- <table id="example" class="display select table table-responsive" cellspacing="0" width="100%"> -->
+     <thead>
+        <tr>
+          <th>{% trans "Bil." %}</th>
+          <th>{% trans "Tarikh mula" %}</th>
+          <th>{% trans "Tarikh akhir" %}</th>
+          <th>{% trans "Tajuk" %}</th>
+          <th>{% trans "Tempat" %}</th>
+          <th>{% trans "Penganjur" %}</th>
+          <th>{% trans "Tindakan" %}</th>
+        </tr>
+     </thead>
+  </table>
+  </div>
+
+  <p class="text-center">
+    <a href="{% url 'aktiviti_new' %}" class="btn btn-primary" >Tambah Aktiviti</a>
+  </p>
+
+{% endblock %}
+
+
+{% block head_datatables_js %}    
+  <script src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>  
+{% endblock %}
+
+{% block head_datatables_css %} 
+  <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css"/>
+  <style>
+    table.dataTable.select tbody tr,
+    table.dataTable thead th:first-child {
+      cursor: pointer;
+    }
+  </style>
+{% endblock %}
+
+{% block jquery %}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+{% endblock %}
+
+{% block head_datatables_script %} 
+   <script type="text/javascript">
+    $(document).ready(function() {
+      $('#example').DataTable( {
+        "processing": true,
+        "serverSide": true,
+        "ajax": '{% url "json_aktiviti" %}',
+        "columnDefs": [ 
+        {
+          "targets": 0,
+          "render": function ( data, type, full, meta ) {
+            return '<a href='+ full[8] +'>'+data+'</a>';
+            
+          }
+        },
+        {
+          "targets": 6,
+          "orderable": false,
+          "render": function ( data, type, full, meta ) {
+            return '<a href=' + full[6] +'>'+'Kemaskini'+'</a> | <a href=' + full[7] +'>'+'Delete'+'</a>';
+            }
+        }, 
+        ]
+      } );
+    } );
+    </script>
+{% endblock %}

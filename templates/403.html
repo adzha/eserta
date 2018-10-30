@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block content %}
+  
+      <!-- <h1>Hapus Maklumat Aktiviti</h1> -->
+      <legend>Ralat "Permission Denied"</legend>
+  <div>
+  	 <!-- <p>Maaf! Anda tidak mempunyai hak untuk mengakses laman ini!</p> -->
+  	 <p>{{ exception }}</p>
+          <br>
+     <a href="{% url 'home' %}" class="btn btn-primary">Kembali ke Muka Utama</a>
+  </div>
+{% endblock %}

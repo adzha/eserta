@@ -1,0 +1,178 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://getbootstrap.com/docs/3.3/favicon.ico">
+
+    <title>{% block head_title %}{% trans "eSERTA" %}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://getbootstrap.com/docs/3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="http://getbootstrap.com/docs/3.3/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="http://getbootstrap.com/docs/3.3/examples/sticky-footer-navbar/sticky-footer-navbar.css" rel="stylesheet">
+
+    {% block head_datatables_css %}{% endblock %}
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="http://getbootstrap.com/docs/3.3/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    {% block navbar %}
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">eSERTA</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            {% block home_navbar %}
+            <li class="active"><a href="/">Home</a></li>
+            {% endblock %}
+
+            {% for g in user.groups.all %}
+              {% if g|stringformat:"s" == "esertaPenganjur"  %}
+                {% block penganjur_navbar %}
+                  <li class="dropdown">
+                        <a href="{% url 'penganjur_home' %}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><!-- span class="glyphicon glyphicon-user"></span --></span>Penganjur<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          <li><a href="{% url 'aktiviti_home' %}">Pengurusan Aktiviti</a></li>
+                          <!-- <li><a href="/accounts/logout/">Logout</a></li> -->
+                        </ul>
+                    </li>
+                {% endblock %}
+              {% endif %}
+            {% endfor %}
+
+             {% for g in user.groups.all %}
+              {% if g|stringformat:"s" == "esertaPeserta"  %}
+                {% block peserta_navbar %}
+                  <li class="dropdown">
+                        <a href="{% url 'home' %}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><!-- span class="glyphicon glyphicon-user"></span --></span>Peserta<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          <li><a href="{% url 'home' %}">Pengurusan Pendafaran</a></li>
+                          <!-- <li><a href="/accounts/logout/">Logout</a></li> -->
+                        </ul>
+                    </li>
+                {% endblock %}
+              {% endif %}
+            {% endfor %}
+            
+            
+            {% block user_navbar %}
+
+              {% if user.is_authenticated %}
+                <!-- <li>Hi</li> -->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><!-- span class="glyphicon glyphicon-user"></span --></span> Hi {{ user.username }} !<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <!-- li><a href="#">Profile</a></li -->
+                    <li><a href="/accounts/password/change/">Change Password</a></li>
+                    <!-- li><a href="#">My Dashboard</a></li -->
+                    <li><a href="/accounts/logout/"><!-- span class="glyphicon glyphicon-off"></span --> Logout</a></li>
+                    <!-- li role="separator" class="divider"></li>
+                    <li class="dropdown-header">Nav header</li>
+                    <li><a href="#">Separated link</a></li>
+                    <li><a href="#">One more separated link</a></li> -->
+                  </ul>
+                </li>
+              {% else %}
+                <li><a href="/accounts/login/">Sign In</a></li>
+                <!-- <li class="active"><a href="/accounts/login/">Sign In</a></li> -->
+                <li><a href="/accounts/signup/">Sign Up</a></li>
+                <!-- <li><a href="#contact">About</a></li> -->
+              {% endif %}
+            {% endblock %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    {% endblock %}
+
+    <!-- Begin page content -->
+    <div class="container">
+
+       {% block messages %}
+          
+          {% if messages %}
+            {% regroup messages|dictsort:"tags" by tags as message_list  %}
+            {% for tags in message_list %}
+              {% for message in tags.list %}
+                {% if forloop.first %}
+                  {% if 'error' in message.tags %}
+                    <div class="alert alert-danger" role="alert">
+                  {% else %}
+                    <div class="alert alert-{{ message.level_tag }}" role="alert">
+                  {% endif %}
+                      <ul class="messages">
+                {% endif %}
+                      <li>
+                        {{ message }}
+                      </li>
+              {% endfor %}
+                    </ul>
+                    <!-- <button type="button" class="close btn pull-right"" data-dismiss="alert" aria-hidden="true">&times;</button> -->
+                  </div>
+            {% endfor %}
+          {% endif %}
+
+        {% endblock %}
+
+      {% block content %}
+      <div class="page-header">
+        <h1>Sticky footer with fixed navbar</h1>
+      </div>
+      <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
+      <p>Back to <a href="../sticky-footer">the default sticky footer</a> minus the navbar.</p>
+    
+      {% endblock %}
+    </div>
+
+    {% block footer %}
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+      </div>
+    </footer>
+    {% endblock %}
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="http://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    {% block head_datatables_js %}{% endblock %}
+    <script src="http://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+    {% block head_datatables_script %}{% endblock %}
+  </body>
+</html>
